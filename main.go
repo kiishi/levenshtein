@@ -1,30 +1,22 @@
-package levenshtein_distance
+package levenshtein
 
 import (
-	"fmt"
 	"math"
 )
 
 func GetDistance(firstString, secondString string) int {
-	matrix := map[int]map[int]int{}
+	memory := map[int]map[int]int{}
 	for a := 1; a < len(firstString)+1; a++ {
 		for b := 1; b < len(secondString)+1; b++ {
-			getLevenshteinValue(firstString, secondString, a, b, matrix)
+			getLevenshteinValue(firstString, secondString, a, b, memory)
 		}
 	}
-	return matrix[len(firstString)][len(secondString)]
+	return memory[len(firstString)][len(secondString)]
 }
 
-func PrintMatrix(memo map[int]map[int]int) {
-	for _, a := range memo {
-		for _, b := range a {
-			fmt.Print(b, "-")
-		}
-		fmt.Println()
-	}
-}
 
 func GetMinimum(values ...int) int {
+	// assuming can never be negative
 	min := -1
 	for _, val := range values {
 		if min < 0 {
@@ -39,7 +31,7 @@ func GetMinimum(values ...int) int {
 	return min
 }
 
-func resolveValue(firstString, secondString string, i, j int) int {
+func getConstant(firstString, secondString string, i, j int) int {
 	if firstString[i-1] == secondString[j-1] {
 		return 0
 	} else {
@@ -48,7 +40,12 @@ func resolveValue(firstString, secondString string, i, j int) int {
 }
 
 func getLevenshteinValue(first, second string, i, j int, memo map[int]map[int]int) int {
-	//	check if the min is zero
+
+	if memo[i] != nil{
+		if val , ok := memo[i][j]; ok{
+			return val
+		}
+	}
 	min := int(math.Min(float64(i), float64(j)))
 	if min == 0 {
 		max := int(math.Max(float64(i), float64(j)))
@@ -63,7 +60,7 @@ func getLevenshteinValue(first, second string, i, j int, memo map[int]map[int]in
 		value := GetMinimum(
 			getLevenshteinValue(first, second, i-1, j, memo)+1,
 			getLevenshteinValue(first, second, i, j-1, memo)+1,
-			getLevenshteinValue(first, second, i-1, j-1, memo)+resolveValue(first, second, i, j),
+			getLevenshteinValue(first, second, i-1, j-1, memo)+getConstant(first, second, i, j),
 		)
 		if memo[i] == nil {
 			memo[i] = make(map[int]int)
