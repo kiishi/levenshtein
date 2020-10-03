@@ -15,6 +15,7 @@ func TestGetDistance(t *testing.T) {
 		{"kitten", "sitting", 3},
 		{"testing", "tester", 3},
 		{"parrallelogram", "ellipse", 12},
+		{"international", "interim", 7},
 	}
 
 

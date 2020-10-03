@@ -12,7 +12,6 @@ func GetDistance(firstString, secondString string) int {
 			getLevenshteinValue(firstString, secondString, a, b, matrix)
 		}
 	}
-	PrintMatrix(matrix)
 	return matrix[len(firstString)][len(secondString)]
 }
 
