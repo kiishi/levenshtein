@@ -6,12 +6,7 @@ import (
 
 func GetDistance(firstString, secondString string) int {
 	memory := map[int]map[int]int{}
-	for a := 1; a < len(firstString)+1; a++ {
-		for b := 1; b < len(secondString)+1; b++ {
-			getLevenshteinValue(firstString, secondString, a, b, memory)
-		}
-	}
-	return memory[len(firstString)][len(secondString)]
+	return getLevenshteinValue(firstString, secondString, len(firstString), len(secondString), memory)
 }
 
 
